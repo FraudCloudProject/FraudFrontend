@@ -49,9 +49,10 @@ function App() {
             <option value="email" onChange={() => setMessageType('email')}>E-mail</option>
           </select>
           <select name="inputType" id="inputType"
+          onChange={(e) => setInputType(e.target.value)}
           className="bg-white text-slate-400 border border-slate-400 font-bold mx-auto w-32 py-2 px-4 rounded-lg focus:outline-none shadow-md">
-            <option value="text" onChange={() => setInputType('text')}>Text</option>
-            <option value="image" onChange={() => setInputType('image')}>PDF</option>
+            <option value="text">Text</option>
+            <option value="image">PDF</option>
           </select>
         </div>
 
@@ -63,7 +64,7 @@ function App() {
             onChange={(e) => setInputText(e.target.value)}
           ></textarea>
         ) : (
-          <div {...getRootProps()} className="border-black border-2 p-10 text-center cursor-pointer">
+          <div {...getRootProps()} className="border-slate-400 border-2 p-16 text-center cursor-pointer">
             <input {...getInputProps()} />
             {
               isDragActive ?
