@@ -10,6 +10,7 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [file, setFile] = useState(null);
 
+
   const onDrop = useCallback(acceptedFiles => {
     setFile(acceptedFiles[0]);
   }, []);
@@ -32,80 +33,51 @@ function App() {
   };
 
   return (
-    <>
-      <div className="container m-auto px-4">
-        <div className="text-5xl text-center my-10">Find Fraud</div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
-          <div className="flex gap-10">
-            <label>
-              <input
-                type="radio"
-                name="messageType"
-                value="sms"
-                className='mr-2'
-                checked={messageType === 'sms'}
-                onChange={() => setMessageType('sms')}
-              /> SMS
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="messageType"
-                value="email"
-                className='mr-2'
-                checked={messageType === 'email'}
-                onChange={() => setMessageType('email')}
-              /> E-mail
-            </label>
-          </div>
-
-          <div className="flex gap-10">
-            <label>
-              <input
-                type="radio"
-                name="inputType"
-                value="text"
-                className='mr-2'
-                checked={inputType === 'text'}
-                onChange={() => setInputType('text')}
-              /> Text
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="inputType"
-                value="image"
-                className='mr-2'
-                checked={inputType === 'image'}
-                onChange={() => setInputType('image')}
-              /> Image
-            </label>
-          </div>
-
-          {inputType === 'text' ? (
-            <textarea
-              className="form-textarea mt-1 block w-full h-40 p-2 border"
-              placeholder="Paste your message here..."
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-            ></textarea>
-          ) : (
-            <div {...getRootProps()} className="border-black border-2 p-10 text-center cursor-pointer">
-              <input {...getInputProps()} />
-              {
-                isDragActive ?
-                  <p>Drop the files here ...</p> :
-                  <p>Drag 'n' drop some files here, or click to select files</p>
-              }
-            </div>
-          )}
-
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Check Message
-          </button>
-        </form>
+    <div className="font-LibreBaskerville bg-slate-200">
+      <div className="text-5xl pt-16 text-center">Find Fraud</div>
+      <div className='text-center text-xl mt-10 mb-2'>
+        <p>Want to know if you're being scammed or spammed?</p>
+        <p>Upload a pdf or paste the message below to let our AI find out!</p>
+        <img className='h-52 mx-auto' src="/fishgif.gif" alt="fishgif" />
       </div>
-    </>
+
+      <form onSubmit={handleSubmit} className="flex flex-col mx-auto pb-20 items-center w-1/2 gap-4">
+        <div className="flex gap-10 justify-center">
+          <select name="messageType" id="messageType"
+          className="bg-white text-slate-400 border border-slate-400 font-bold mx-auto w-32 py-2 px-4 rounded-lg focus:outline-none shadow-md">
+            <option value="sms" onChange={() => setMessageType('sms')}>SMS</option>
+            <option value="email" onChange={() => setMessageType('email')}>E-mail</option>
+          </select>
+          <select name="inputType" id="inputType"
+          className="bg-white text-slate-400 border border-slate-400 font-bold mx-auto w-32 py-2 px-4 rounded-lg focus:outline-none shadow-md">
+            <option value="text" onChange={() => setInputType('text')}>Text</option>
+            <option value="image" onChange={() => setInputType('image')}>PDF</option>
+          </select>
+        </div>
+
+        {inputType === 'text' ? (
+          <textarea
+            className="form-textarea mt-1 block w-full h-40 p-2 rounded-lg border focus:border-slate-400 focus:outline-none border-slate-400"
+            placeholder="Paste your message here..."
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          ></textarea>
+        ) : (
+          <div {...getRootProps()} className="border-black border-2 p-10 text-center cursor-pointer">
+            <input {...getInputProps()} />
+            {
+              isDragActive ?
+                <p>Drop the files here ...</p> :
+                <p>Drag 'n' drop some files here, or click to select files</p>
+            }
+          </div>
+        )}
+
+        <button type="submit" className="bg-slate-400 text-white border border-slate-400 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 hover:scale-125 hover:bg-white hover:text-slate-400">
+          Check Message
+        </button>
+      </form>
+    </div>
   );
 }
 
