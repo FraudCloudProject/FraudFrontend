@@ -23,6 +23,7 @@ function App() {
       setError("Please select a file to upload.");
       return;
     }
+    console.log(file);
 
     setLoading(true);
     setError("");
