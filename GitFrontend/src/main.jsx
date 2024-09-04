@@ -33,7 +33,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "https://<your-azure-function-url>/api/MyFunction",
+        "https://phisingfunction.azurewebsites.net/",
         {
           // Replace with your Azure Function URL
           method: "POST",
