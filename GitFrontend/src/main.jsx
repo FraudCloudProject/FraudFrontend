@@ -21,7 +21,7 @@ function App() {
 
   const uploadFile = async () => {
     function setfield(value) {
-      setInputText(value);
+      setPhishingText(value);
 
     }
 
