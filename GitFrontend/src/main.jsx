@@ -65,7 +65,7 @@ function App() {
     formData.append("type", messageType);
     formData.append("file", file);
     uploadFile(formData);
-    alert(`Analysis Result: ${result.analysis}`);
+    alert(`Analysis Result: ${result}`);
   };
 
   return (
