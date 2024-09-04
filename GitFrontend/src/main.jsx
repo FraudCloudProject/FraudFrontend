@@ -8,6 +8,7 @@ function App() {
   const [messageType, setMessageType] = useState("sms");
   const [inputType, setInputType] = useState("text");
   const [inputText, setInputText] = useState("");
+  const [phishingText, setPhishingText] = useState("");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,17 +20,31 @@ function App() {
   };
 
   const uploadFile = async () => {
-    if (!file) {
+    if (inputType === "text") {
+      if (!text) {
       setError("Please select a file to upload.");
       return;
     }
-    console.log(file);
+    setPhishingText(inputText);
+  }
+
+    if (inputType === "image") {
+      if (!file) {
+        setError("Please select a file to upload.");
+        return;
+      }
+      setPhishingText(file);
+    }
+
+    console.log(phishingText);
 
     setLoading(true);
     setError("");
 
+
+
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", phishingText);
 
     try {
       const response = await fetch(
