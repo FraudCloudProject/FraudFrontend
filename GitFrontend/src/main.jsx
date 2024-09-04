@@ -21,7 +21,7 @@ function App() {
 
   const uploadFile = async () => {
     if (inputType === "text") {
-      if (!text) {
+      if (!inputText) {
       setError("Please select a file to upload.");
       return;
     }
