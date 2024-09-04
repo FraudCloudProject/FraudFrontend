@@ -20,12 +20,18 @@ function App() {
   };
 
   const uploadFile = async () => {
+    function setfield(value) {
+      setInputText(value);
+
+    }
+
+
     if (inputType === "text") {
       if (!inputText) {
       setError("Please select a file to upload.");
       return;
     }
-    setPhishingText(inputText);
+    setfield(inputText);
   }
 
     if (inputType === "image") {
@@ -33,7 +39,7 @@ function App() {
         setError("Please select a file to upload.");
         return;
       }
-      setPhishingText(file);
+      setField(file);
     }
 
     console.log(phishingText);
