@@ -8,59 +8,20 @@ function App() {
   const [messageType, setMessageType] = useState("sms");
   const [inputType, setInputType] = useState("text");
   const [inputText, setInputText] = useState("");
-  const [phishingText, setPhishingText] = useState("");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-    setError("");
-  };
-
-  const uploadFile = async () => {
-    function setfield(value) {
-      setPhishingText(value);
-
-    }
-
-
-    if (inputType === "text") {
-      if (!inputText) {
-      setError("Please select a file to upload.");
-      return;
-    }
-    setfield(inputText);
-  }
-
-    if (inputType === "image") {
-      if (!file) {
-        setError("Please select a file to upload.");
-        return;
-      }
-      setField(file);
-    }
-
-    console.log(phishingText);
-
+  const uploadFile = async (formData) => {
     setLoading(true);
     setError("");
 
-
-
-    const formData = new FormData();
-    formData.append("file", phishingText);
-
     try {
-      const response = await fetch(
-        "https://phisingfunction.azurewebsites.net/",
-        {
-          // Replace with your Azure Function URL
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch("https://phishingfunction.azurewebsites.net/", {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -75,20 +36,34 @@ function App() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("type", messageType);
+
+    if (inputType === "text") {
+      if (!inputText) {
+        setError("Please enter the text.");
+        return;
+      }
+      formData.append("file", new Blob([inputText], { type: "text/plain" }));
+    } else if (inputType === "image") {
+      if (!file) {
+        setError("Please select a file to upload.");
+        return;
+      }
+      formData.append("file", file);
+    }
+
+    await uploadFile(formData);
+  };
+
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles[0]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("type", messageType);
-    formData.append("file", file);
-    uploadFile(formData);
-    alert(`Analysis Result: ${result}`);
-  };
 
   return (
     <div className="font-LibreBaskerville bg-slate-200">
@@ -96,7 +71,7 @@ function App() {
       <div className="text-center text-xl mt-10 mb-2">
         <p>Want to know if you're being scammed or spammed?</p>
         <p>Upload a pdf or paste the message below to let our AI find out!</p>
-        <p>{error}</p>
+        {error && <p className="text-red-500">{error}</p>}
         <img className="h-52 mx-auto" src="/fishgif.gif" alt="fishgif" />
       </div>
 
@@ -109,19 +84,18 @@ function App() {
             name="messageType"
             id="messageType"
             className="bg-white text-slate-400 border border-slate-400 font-bold mx-auto w-32 py-2 px-4 rounded-lg focus:outline-none shadow-md"
+            value={messageType}
+            onChange={(e) => setMessageType(e.target.value)}
           >
-            <option value="sms" onChange={() => setMessageType("sms")}>
-              SMS
-            </option>
-            <option value="email" onChange={() => setMessageType("email")}>
-              E-mail
-            </option>
+            <option value="sms">SMS</option>
+            <option value="email">E-mail</option>
           </select>
           <select
             name="inputType"
             id="inputType"
-            onChange={(e) => setInputType(e.target.value)}
             className="bg-white text-slate-400 border border-slate-400 font-bold mx-auto w-32 py-2 px-4 rounded-lg focus:outline-none shadow-md"
+            value={inputType}
+            onChange={(e) => setInputType(e.target.value)}
           >
             <option value="text">Text</option>
             <option value="image">PDF</option>
@@ -153,13 +127,13 @@ function App() {
           type="submit"
           className="bg-slate-400 text-white border border-slate-400 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 hover:scale-125 hover:bg-white hover:text-slate-400"
         >
-          Check Message
+          {loading ? "Loading..." : "Check Message"}
         </button>
       </form>
+
+      {result && <pre className="bg-white p-4 rounded-lg">{result}</pre>}
     </div>
   );
 }
-
-export default App;
 
 createRoot(document.getElementById("root")).render(<App />);
