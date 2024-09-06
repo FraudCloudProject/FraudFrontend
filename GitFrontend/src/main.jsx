@@ -18,7 +18,7 @@ function App() {
     setError("");
 
     try {
-      const apiKey = process.env.API_KEY
+      const apiKey = process.env.REACT_APP_API_KEY
       console.log(apiKey)
       const response = await fetch(`https://phishingfunction.azurewebsites.net/?code=${apiKey}`, {
         method: "POST",

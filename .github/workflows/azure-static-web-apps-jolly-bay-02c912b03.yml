@@ -22,7 +22,7 @@ jobs:
 
       # Step to set the API key as an environment variable for the build process
       - name: Set up environment variables
-        run: echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+        run: echo "REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }}" >> $GITHUB_ENV
 
       - name: Build And Deploy
         id: builddeploy
