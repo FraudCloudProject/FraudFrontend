@@ -18,23 +18,15 @@ function App() {
     setError("");
 
     try {
-      const apiKey = process.env.REACT_APP_API_KEY;
-      console.log(apiKey);
-
-      // Convert FormData to a plain object
-      const plainFormData = Object.fromEntries(formData.entries());
-
+      const apiKey = process.env.REACT_APP_API_KEY
+      console.log(apiKey)
       const response = await fetch(`https://phisingfunction.azurewebsites.net/api/mycustomroute`, {
         method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(plainFormData),
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -57,7 +49,7 @@ function App() {
         setError("Please enter the text.");
         return;
       }
-      formData.append("content", inputText);
+      formData.append("file", new Blob([inputText], { type: "text/plain" }));
     } else if (inputType === "image") {
       if (!file) {
         setError("Please select a file to upload.");
