@@ -20,7 +20,7 @@ function App() {
     try {
       const apiKey = process.env.REACT_APP_API_KEY
       console.log(apiKey)
-      const response = await fetch(`https://phishingfunction.azurewebsites.net/?code=${apiKey}`, {
+      const response = await fetch(`https://phishingfunction.azurewebsites.net/api/MyFunction?code=${apiKey}`, {
         method: "POST",
         body: formData,
       });
