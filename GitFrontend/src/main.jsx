@@ -20,7 +20,7 @@ function App() {
     try {
       const apiKey = process.env.REACT_APP_API_KEY
       console.log(apiKey)
-      const response = await fetch(`https://phisingfunction.azurewebsites.net/api/mycustomroute}`, {
+      const response = await fetch(`https://phisingfunction.azurewebsites.net/}`, {
         method: "POST",
         body: formData,
       });
