@@ -18,7 +18,7 @@ function App() {
     setError("");
 
     try {
-      const response = await fetch("https://phishingfunction.azurewebsites.net/api/phisingfunction", {
+      const response = await fetch("https://phishingfunction.azurewebsites.net/api/MyFunction", {
         method: "POST",
         body: formData,
       });
