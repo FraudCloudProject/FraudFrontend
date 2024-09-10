@@ -43,18 +43,42 @@ function App() {
   const uploadFile = async (formData) => {
     setLoading(true);
     setError("");
-
+  
     try {
+      // Convert ArrayBuffer to Blob and append to FormData
       const buffer = await file.arrayBuffer();
-      const text = await extractTextFromPdf(buffer);
-      const data = { content: text }; // Convert the text into a JSON object
-      setResult(JSON.stringify(data, null, 2));
+      const blob = new Blob([buffer], { type: 'application/pdf' });
+      formData.append("file", blob, file.name);
+      formData.append("type", messageType);
+  
+      // Create a TextDecoder instance for 'utf-8' encoding
+      const textDecoder = new TextDecoder('utf-8');
+  
+      // Convert ArrayBuffer to text
+      const text = textDecoder.decode(buffer);
+  
+      // Optional: Log or use the text for debugging
+      console.log('Decoded text:', text);
+  
+      // Send the file and form data to the backend
+      const response = await fetch('<YOUR_BACKEND_URL>', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        setResult(JSON.stringify(result, null, 2));
+      } else {
+        throw new Error(result.error || 'Unknown error');
+      }
     } catch (error) {
       setError(`Failed to upload file: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
