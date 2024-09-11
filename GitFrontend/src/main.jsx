@@ -45,33 +45,19 @@ function App() {
     setError("");
   
     try {
-      // Convert ArrayBuffer to Blob and append to FormData
-      const buffer = await file.arrayBuffer();
-      const blob = new Blob([buffer], { type: 'application/pdf' });
-      formData.append("file", blob, file.name);
-      formData.append("type", messageType);
-  
-      // Create a TextDecoder instance for 'utf-8' encoding
-      const textDecoder = new TextDecoder('utf-8');
-  
-      // Convert ArrayBuffer to text
-      const text = textDecoder.decode(buffer);
-  
-      // Optional: Log or use the text for debugging
-      console.log('Decoded text:', text);
-  
-      // Send the file and form data to the backend
-      const response = await fetch('<YOUR_BACKEND_URL>', {
-        method: 'POST',
+      const apiKey = process.env.REACT_APP_API_KEY
+      console.log(apiKey)
+      const response = await fetch(`https://phisingfunction.azurewebsites.net/api/mycustomroute`, {
+        method: "POST",
         body: formData,
       });
-  
-      const result = await response.json();
-      if (response.ok) {
-        setResult(JSON.stringify(result, null, 2));
-      } else {
-        throw new Error(result.error || 'Unknown error');
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      const data = await response.json();
+      setResult(JSON.stringify(data, null, 2));
     } catch (error) {
       setError(`Failed to upload file: ${error.message}`);
     } finally {
