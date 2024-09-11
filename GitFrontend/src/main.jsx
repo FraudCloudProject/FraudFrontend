@@ -1,11 +1,8 @@
-import React, { useState, useCallback } from 'react';
-import { createRoot } from 'react-dom/client';
-import { useDropzone } from 'react-dropzone';
-const pdfjs = await import('pdfjs-dist/build/pdf');
-const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-import './index.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import React, { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 function App() {
   const [messageType, setMessageType] = useState("sms");
@@ -16,34 +13,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const pdfFile = acceptedFiles.find(f => f.type === 'application/pdf');
-    if (pdfFile) {
-      setFile(pdfFile);
-      setInputType('image'); // Assuming 'image' type is used for PDFs in your original code
-    } else {
-      setError('Please upload a valid PDF file.');
-    }
-  }, []);
-
-  const extractTextFromPdf = async (pdfBuffer) => {
-    const loadingTask = pdfjs.getDocument({ data: pdfBuffer });
-    const pdfDoc = await loadingTask.promise;
-    let text = '';
-
-    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      text += textContent.items.map(item => item.str).join(' ') + '\n';
-    }
-
-    return text;
-  };
-
   const uploadFile = async (formData) => {
     setLoading(true);
     setError("");
-  
+
     try {
       const apiKey = process.env.REACT_APP_API_KEY
       console.log(apiKey)
@@ -64,22 +37,33 @@ function App() {
       setLoading(false);
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!file && inputType === 'image') {
-      setError("Please select a PDF file to upload.");
-      return;
-    }
-
     const formData = new FormData();
     formData.append("type", messageType);
-    formData.append("file", file);
+
+    if (inputType === "text") {
+      if (!inputText) {
+        setError("Please enter the text.");
+        return;
+      }
+      formData.append("file", new Blob([inputText], { type: "text/plain" }));
+    } else if (inputType === "image") {
+      if (!file) {
+        setError("Please select a file to upload.");
+        return;
+      }
+      formData.append("file", file);
+    }
 
     await uploadFile(formData);
   };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -88,12 +72,15 @@ function App() {
       <div className="text-5xl pt-16 text-center">Find Fraud</div>
       <div className="text-center text-xl mt-10 mb-2">
         <p>Want to know if you're being scammed or spammed?</p>
-        <p>Upload a PDF or paste the message below to let our AI find out!</p>
+        <p>Upload a pdf or paste the message below to let our AI find out!</p>
         {error && <p className="text-red-500">{error}</p>}
         <img className="h-52 mx-auto" src="/fishgif.gif" alt="fishgif" />
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col mx-auto pb-20 items-center w-1/2 gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col mx-auto pb-20 items-center w-1/2 gap-4"
+      >
         <div className="flex gap-10 justify-center">
           <select
             name="messageType"
@@ -133,7 +120,7 @@ function App() {
             {isDragActive ? (
               <p>Drop the files here ...</p>
             ) : (
-              <p>Drag 'n' drop a PDF file here, or click to select files</p>
+              <p>Drag 'n' drop some files here, or click to select files</p>
             )}
           </div>
         )}
