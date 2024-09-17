@@ -49,7 +49,8 @@ function App() {
   };
 
   const handleSubmit = async (e) => {
-    console.log(file);
+    console.log(file);¨
+    console.log(inputText);
     e.preventDefault();
 
     const formData = new FormData();
