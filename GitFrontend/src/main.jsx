@@ -144,13 +144,13 @@ function App() {
           {loading ? "Loading..." : "Check Message"}
         </button>
       </form>
-      <div className="mx-auto text-center">
+      <div className="mx-auto text-center bg-slate-200">
         {result && (
           <p className="bg-white p-4 rounded-lg">
             <strong>Result:</strong> {result}
           </p>
         )}
-        {urlDetected !== null && (
+        {urlDetected !== null && result && (
           <p className="bg-white p-4 rounded-lg">
             <strong>URL Detected:</strong> {urlDetected ? "Yes" : "No"}
           </p>
