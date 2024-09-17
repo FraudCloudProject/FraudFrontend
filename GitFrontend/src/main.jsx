@@ -10,6 +10,7 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
+  const [urlDetected, setUrlDetected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -33,7 +34,11 @@ function App() {
       }
 
       const data = await response.json();
-      setResult(JSON.stringify(data, null, 2));
+
+      const results = data.result.ml_result.Results?.[0];
+      const urlDetectedValue = data.result.url_detected;
+      setResult(results || "No result");
+      setUrlDetected(urlDetectedValue); 
     } catch (error) {
       setError(`Failed to upload file: ${error.message}`);
     } finally {
@@ -75,7 +80,7 @@ function App() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div className="font-LibreBaskerville bg-slate-200">
+    <div className="font-LibreBaskerville h-screen bg-slate-200">
       <div className="text-5xl pt-16 text-center">Find Fraud</div>
       <div className="text-center text-xl mt-10 mb-2">
         <p>Want to know if you're being scammed or spammed?</p>
@@ -139,8 +144,19 @@ function App() {
           {loading ? "Loading..." : "Check Message"}
         </button>
       </form>
+      <div className="mx-auto text-center">
+        {result && (
+          <p className="bg-white p-4 rounded-lg">
+            <strong>Result:</strong> {result}
+          </p>
+        )}
+        {urlDetected !== null && (
+          <p className="bg-white p-4 rounded-lg">
+            <strong>URL Detected:</strong> {urlDetected ? "Yes" : "No"}
+          </p>
+        )}
+      </div>
 
-      {result && <pre className="bg-white p-4 rounded-lg">{result}</pre>}
     </div>
   );
 }
