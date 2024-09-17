@@ -1,14 +1,16 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { faFilePdf } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function App() {
   const [messageType, setMessageType] = useState("sms");
   const [inputType, setInputType] = useState("text");
   const [inputText, setInputText] = useState("");
   const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("")
   const [result, setResult] = useState("");
   const [urlDetected, setUrlDetected] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -75,6 +77,7 @@ function App() {
 
   const onDrop = useCallback((acceptedFiles) => {
     setFile(acceptedFiles[0]);
+    setFileName(acceptedFiles[0].name)
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -126,11 +129,16 @@ function App() {
         ) : (
           <div
             {...getRootProps()}
-            className="border-slate-400 border-2 p-16 text-center cursor-pointer"
+            className="border-slate-400 border-2 p-16 text-center cursor-pointer w-full"
           >
             <input {...getInputProps()} />
             {isDragActive ? (
               <p>Drop the files here ...</p>
+            ) : fileName ? (
+              <div>
+                <FontAwesomeIcon icon={faFilePdf} className="w-10 h-10 pb-4" />
+                <p>{fileName}</p>
+              </div>
             ) : (
               <p>Drag 'n' drop some files here, or click to select files</p>
             )}
