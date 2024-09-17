@@ -10,7 +10,7 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
-  const [urlDetected, setUrlDetected] = useState(false);
+  const [urlDetected, setUrlDetected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -150,7 +150,7 @@ function App() {
             <strong>Result:</strong> {result}
           </p>
         )}
-        {urlDetected !== null && (
+        {urlDetected !== null && result && (
           <p className="bg-white p-4 rounded-lg">
             <strong>URL Detected:</strong> {urlDetected ? "Yes" : "No"}
           </p>
