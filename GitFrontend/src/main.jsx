@@ -18,12 +18,15 @@ function App() {
     setError("");
 
     try {
-      const apiKey = process.env.REACT_APP_API_KEY
-      console.log(apiKey)
-      const response = await fetch(`https://phisingfunction.azurewebsites.net/api/mycustomroute`, {
-        method: "POST",
-        body: formData,
-      });
+      const apiKey = process.env.REACT_APP_API_KEY;
+      console.log(apiKey);
+      const response = await fetch(
+        `https://phisingfunction.azurewebsites.net/api/mycustomroute`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -42,20 +45,24 @@ function App() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("type", messageType);
+    formData.append("type", messageType); // "sms" or "email"
 
     if (inputType === "text") {
       if (!inputText) {
         setError("Please enter the text.");
         return;
       }
-      formData.append("file", new Blob([inputText], { type: "text/plain" }));
+      formData.append(
+        "file",
+        new Blob([inputText], { type: "text/plain" }),
+        "message.txt"
+      ); // sending text as a file
     } else if (inputType === "image") {
       if (!file) {
         setError("Please select a file to upload.");
         return;
       }
-      formData.append("file", file);
+      formData.append("file", file); // sending the PDF file
     }
 
     await uploadFile(formData);
