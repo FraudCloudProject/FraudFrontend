@@ -89,7 +89,7 @@ function App() {
       <div className="text-5xl pt-16 text-center">Find Fraud</div>
       <div className="text-center text-xl mt-10 mb-2">
         <p>Want to know if you're being scammed or spammed?</p>
-        <p>Upload a pdf or paste the message below to let our AI find out!</p>
+        <p>Upload a message below to let our AI find out!</p>
         {error && <p className="text-red-500">{error}</p>}
         <img className="h-52 mx-auto" src="/fishgif.gif" alt="fishgif" />
       </div>
