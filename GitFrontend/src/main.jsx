@@ -157,7 +157,7 @@ function App() {
       <div className="mx-auto text-center bg-slate-200">
         {result && (
           <p className="p-4 rounded-lg">
-            <strong>Result:</strong> {result === "ham" ? "Not Fraudulent" : result === "Smishing" ? "Fraud" : result === "spam" ? "Spam" : "Unknown Result"}
+            <strong>Result:</strong> {result === "ham" ? "Not Fraudulent" : result === "Smishing" ? "Fraud" : result === "Spam" ? "Spam" : "Unknown Result"}
           </p>
         )}
         {urlDetected !== null && result && (
